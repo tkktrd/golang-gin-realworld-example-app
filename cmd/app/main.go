@@ -1,16 +1,7 @@
 package main
 
-import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-)
+import "tkktrd/golang-gin-realworld-example-app/internal/app"
 
 func main() {
-	engine := gin.Default()
-	engine.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H {
-			"message": "Hello World",
-		})
-	})
-	engine.Run(":3000")
+	app.Run()
 }
