@@ -1,0 +1,7 @@
+Mysql:
+  MySQLHost: database
+  MySQLPort: 3306
+  MySQLUser: docker
+  MySQLPassword: docker
+  MySQLDatabaseName: docker
+  MySQLConnectRetries: 10

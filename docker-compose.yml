@@ -5,3 +5,36 @@ services:
     build: .
     ports:
       - "3000:3000"
+    depends_on:
+      - database
+  database:
+    image: mysql:8.0
+    container_name: database
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+  migrate:
+    build: ./db/migrations
+    container_name: migrate
+    command: ["up"]
+    env_file:
+      - .env
+    environment:
+      WAIT_HOSTS: database:3306
+      MIGRATIONS_DIR: /migrations
+      MYSQL_HOST: database
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./db/migrations/migrations:/migrations
+    depends_on:
+      - database
