@@ -14,4 +14,5 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /bin/app ./cmd/app
 ## Server
 FROM scratch
 COPY --from=builder /bin/app /app
+COPY --from=builder /app/config /config
 CMD ["/app"]
