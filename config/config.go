@@ -15,6 +15,7 @@ type MySQLConfig struct {
 	MySQLUser string
 	MySQLPassword string
 	MySQLDatabaseName string
+	MySQLConnectRetries int
 }
 
 func LoadConfig(filename string) (*Config, error) {
