@@ -32,6 +32,8 @@ func (v *UserModelValidator) Bind(c *gin.Context) error {
 
 	v.UserModel.Username = v.User.Username
 	v.UserModel.Email = v.User.Email
-	v.UserModel.PasswordHash = ""
+	if err := v.UserModel.SetPassword(v.User.Password); err != nil {
+		return err
+	}
 	return nil
 }

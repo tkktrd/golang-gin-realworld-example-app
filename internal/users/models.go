@@ -1,6 +1,10 @@
 package users
 
-import "time"
+import (
+	"fmt"
+	"golang.org/x/crypto/bcrypt"
+	"time"
+)
 
 type UserModel struct {
 	ID           uint    `gorm:"primary_key"`
@@ -13,4 +17,17 @@ type UserModel struct {
 
 func (u UserModel) TableName() string {
 	return "users"
+}
+
+func (u *UserModel) SetPassword(password string) error {
+	if len(password) == 0 {
+		return fmt.Errorf("password should not be empty")
+	}
+	bytePassword := []byte(password)
+	passwordHash, err := bcrypt.GenerateFromPassword(bytePassword, bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("password hashing failed, %v", err)
+	}
+	u.PasswordHash = string(passwordHash)
+	return nil
 }
