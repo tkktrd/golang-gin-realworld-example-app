@@ -1,4 +1,6 @@
-Mysql:
+server:
+  JwtSecretKey: jwtsecretkey
+mysql:
   MySQLHost: database
   MySQLPort: 3306
   MySQLUser: docker
