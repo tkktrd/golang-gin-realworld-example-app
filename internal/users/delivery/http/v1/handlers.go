@@ -31,8 +31,12 @@ func (h *usersHandlers) Registration() gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, gin.H{
-			"user": h.userSerializer.Response(userModelValidator.GetUserModel()),
-		})
+		response, err := h.userSerializer.Response(userModelValidator.GetUserModel())
+		if err != nil {
+			ctx.JSON(http.StatusUnprocessableEntity, common.NewStatusUnprocessableEntityError())
+			return
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{ "user": response })
 	}
 }

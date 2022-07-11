@@ -1,20 +1,26 @@
 package serializers
 
-import "tkktrd/golang-gin-realworld-example-app/internal/users"
+import (
+	"fmt"
+	"tkktrd/golang-gin-realworld-example-app/config"
+	"tkktrd/golang-gin-realworld-example-app/internal/users"
+	"tkktrd/golang-gin-realworld-example-app/pkg/common"
+)
 
 type UserSerializer struct {
-
+	config *config.Config
 }
 
-func NewUserSerializer() users.UserSerializer {
-	return &UserSerializer{}
+func NewUserSerializer(config *config.Config) users.UserSerializer {
+	return &UserSerializer{ config: config }
 }
 
-func (s *UserSerializer) Response(userModel *users.UserModel) users.UserResponse {
-	res := users.UserResponse{
-		Username: userModel.Username,
-		Email: userModel.Email,
-		Token: "",
+func (s *UserSerializer) Response(userModel *users.UserModel) (users.UserResponse, error) {
+	res := users.UserResponse { Username: userModel.Username, Email: userModel.Email }
+	token, err := common.GenerateJwtToken(userModel.ID, userModel.Email, s.config)
+	if err != nil {
+		return res, fmt.Errorf("failed to generate token, %v", err)
 	}
-	return res
+	res.Token = token
+	return res, nil
 }

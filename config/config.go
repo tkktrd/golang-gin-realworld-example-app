@@ -6,7 +6,12 @@ import (
 )
 
 type Config struct {
+	Server ServerConfig
 	MySQL MySQLConfig
+}
+
+type ServerConfig struct {
+	JwtSecretKey string
 }
 
 type MySQLConfig struct {
