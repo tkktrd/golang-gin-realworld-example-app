@@ -7,5 +7,5 @@ type UserResponse struct {
 }
 
 type UserSerializer interface {
-	Response(userModel *UserModel) UserResponse
+	Response(userModel *UserModel) (UserResponse, error)
 }

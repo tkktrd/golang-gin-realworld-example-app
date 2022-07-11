@@ -40,5 +40,5 @@ func (app *App) createUserHandler() users.Handlers {
 	return v1.NewUsersHandlers(
 		usecase.NewUserUseCase(repository),
 		validators.NewUserModelValidator(),
-		serializers.NewUserSerializer())
+		serializers.NewUserSerializer(app.config))
 }
