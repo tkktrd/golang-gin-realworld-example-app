@@ -1,5 +1,5 @@
 server:
-  JwtSecretKey: jwtsecretkey
+  JwtSecretKey: BoLhEpq3VraQQ+zLwcLk5ZVRSjqYLQ0SddWSJli6kgvyI293wZS2Iw==
 mysql:
   MySQLHost: database
   MySQLPort: 3306
