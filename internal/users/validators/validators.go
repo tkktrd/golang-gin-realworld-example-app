@@ -37,3 +37,30 @@ func (v *UserModelValidator) Bind(c *gin.Context) error {
 	}
 	return nil
 }
+
+type LoginValidator struct {
+	User struct {
+		Username string `form:"username" json:"username" binding:"required,alphanum,min=4,max=255"`
+		Password string `form:"password" json:"password" binding:"required,min=8,max=255"`
+	} `json:"user"`
+	UserModel users.UserModel `json:"-"`
+}
+
+func NewLoginValidator() users.Validators {
+	loginValidator := LoginValidator{}
+	return &loginValidator
+}
+
+func (v *LoginValidator) GetUserModel() *users.UserModel {
+	return &v.UserModel
+}
+
+func (v *LoginValidator) Bind(c *gin.Context) error {
+	bind := binding.Default(c.Request.Method, c.ContentType())
+	if err := c.ShouldBindWith(v, bind); err != nil {
+		return err
+	}
+
+	v.UserModel.Username = v.User.Username
+	return nil
+}
