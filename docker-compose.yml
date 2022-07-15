@@ -7,6 +7,7 @@ services:
       - "3000:3000"
     depends_on:
       - database
+      - session
   database:
     image: mysql:8.0
     container_name: database
@@ -38,3 +39,11 @@ services:
       - ./db/migrations/migrations:/migrations
     depends_on:
       - database
+  session:
+    image: redis
+    container_name: session
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "6379:6379"
