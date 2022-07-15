@@ -1,5 +1,7 @@
 package users
 
+import "github.com/gin-gonic/gin"
+
 type UserResponse struct {
 	Username string  `json:"username"`
 	Email    string  `json:"email"`
@@ -7,5 +9,5 @@ type UserResponse struct {
 }
 
 type UserSerializer interface {
-	Response(userModel *UserModel) (UserResponse, error)
+	Response(ctx *gin.Context) (UserResponse, error)
 }

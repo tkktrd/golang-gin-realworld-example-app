@@ -39,7 +39,7 @@ func (h *usersHandlers) Registration() gin.HandlerFunc {
 			return
 		}
 
-		response, err := h.userSerializer.Response(userModelValidator.GetUserModel())
+		response, err := h.userSerializer.Response(ctx)
 		if err != nil {
 			e := common.NewStatusUnprocessableEntityError()
 			ctx.JSON(e.Status(), e)
@@ -59,7 +59,14 @@ func (h *usersHandlers) Login() gin.HandlerFunc {
 			return
 		}
 
-		response, err := h.userSerializer.Response(loginValidator.GetUserModel())
+		err := h.useCase.Login(ctx, loginValidator.GetUsername(), loginValidator.GetPassword())
+		if err != nil {
+			e := common.ParseErrors(err)
+			ctx.JSON(e.Status(), e)
+			return
+		}
+
+		response, err := h.userSerializer.Response(ctx)
 		if err != nil {
 			e := common.NewStatusUnprocessableEntityError()
 			ctx.JSON(e.Status(), e)

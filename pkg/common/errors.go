@@ -8,8 +8,10 @@ import (
 )
 
 const (
-	ErrBadRequest = "bad request"
+	ErrBadRequest          = "bad request"
 	ErrUserIdAlreadyExists = "user with given user-id already exists"
+	ErrUnauthorized        = "Unauthorized"
+	ErrUnprocessableEntity = "unprocessable entity"
 )
 
 var (
@@ -56,6 +58,10 @@ func ParseErrors(err error) HttpError {
 		return &OpaqueHttpError{http.StatusBadRequest, err.Error() }
 	case strings.Contains(err.Error(), ErrUserIdAlreadyExists):
 		return &OpaqueHttpError{http.StatusBadRequest, err.Error() }
+	case strings.Contains(err.Error(), ErrUnauthorized):
+		return &OpaqueHttpError{http.StatusUnauthorized, err.Error() }
+	case strings.Contains(err.Error(), ErrUnprocessableEntity):
+		return NewStatusUnprocessableEntityError()
 	default:
 		if httpError, ok := err.(HttpError); ok {
 			return httpError

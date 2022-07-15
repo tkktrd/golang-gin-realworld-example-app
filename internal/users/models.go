@@ -31,3 +31,9 @@ func (u *UserModel) SetPassword(password string) error {
 	u.PasswordHash = string(passwordHash)
 	return nil
 }
+
+func (u *UserModel) CheckPassword(password string) error {
+	bytePassword := []byte(password)
+	bytePasswordHash := []byte(u.PasswordHash)
+	return bcrypt.CompareHashAndPassword(bytePasswordHash, bytePassword)
+}

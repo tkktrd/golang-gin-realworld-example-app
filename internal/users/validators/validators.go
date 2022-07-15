@@ -20,6 +20,14 @@ func NewUserModelValidator() users.Validators {
 	return &userModelValidator
 }
 
+func (v *UserModelValidator) GetUsername() string {
+	return v.User.Username
+}
+
+func (v *UserModelValidator) GetPassword() string {
+	return v.User.Password
+}
+
 func (v *UserModelValidator) GetUserModel() *users.UserModel {
 	return &v.UserModel
 }
@@ -49,6 +57,14 @@ type LoginValidator struct {
 func NewLoginValidator() users.Validators {
 	loginValidator := LoginValidator{}
 	return &loginValidator
+}
+
+func (v *LoginValidator) GetUsername() string {
+	return v.User.Username
+}
+
+func (v *LoginValidator) GetPassword() string {
+	return v.User.Password
 }
 
 func (v *LoginValidator) GetUserModel() *users.UserModel {
