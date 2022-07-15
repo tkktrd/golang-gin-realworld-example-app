@@ -17,3 +17,11 @@ func (repo *UsersRepository) Create(user *users.UserModel) error {
 	err := repo.db.Save(user).Error
 	return err
 }
+
+func (repo *UsersRepository) FindOneUser(condition interface{}) (*users.UserModel, error) {
+	var model users.UserModel
+	if err := repo.db.Where(condition).First(&model).Error; err != nil {
+		return nil, err
+	}
+	return &model, nil
+}
