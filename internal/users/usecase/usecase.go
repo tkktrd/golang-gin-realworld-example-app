@@ -25,8 +25,26 @@ func (uc *UserUseCase) Registration(ctx *gin.Context, model *users.UserModel) er
 		return fmt.Errorf(common.ErrBadRequest)
 	}
 
-	err = uc.usersRepository.Create(model)
+	if err = uc.usersRepository.Create(model); err != nil {
+		return fmt.Errorf(common.ErrUnprocessableEntity)
+	}
+
+	ctx.Set("user_model", model)
 	return err
+}
+
+func (uc *UserUseCase) Login(ctx *gin.Context, username string, password string) error {
+	existsUser, err := uc.usersRepository.FindOneUser(&users.UserModel{Username: username})
+	if err != nil {
+		return fmt.Errorf(common.ErrBadRequest)
+	}
+
+	if err = existsUser.CheckPassword(password); err != nil {
+		return fmt.Errorf(common.ErrBadRequest)
+	}
+
+	ctx.Set("user_model", existsUser)
+	return nil
 }
 
 func (uc *UserUseCase) isAcceptable(ctx *gin.Context, model *users.UserModel) bool {
