@@ -21,19 +21,22 @@ func (h *usersHandlers) Registration() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		userModelValidator := h.userValidator
 		if err := userModelValidator.Bind(ctx); err != nil {
-			ctx.JSON(http.StatusUnprocessableEntity, common.NewStatusUnprocessableEntityError())
+			e := common.NewStatusUnprocessableEntityError()
+			ctx.JSON(e.Status(), e)
 			return
 		}
 
 		err := h.useCase.Registration(ctx, userModelValidator.GetUserModel())
 		if err != nil {
-			ctx.JSON(http.StatusUnprocessableEntity, common.NewStatusUnprocessableEntityError())
+			e := common.ParseErrors(err)
+			ctx.JSON(e.Status(), e)
 			return
 		}
 
 		response, err := h.userSerializer.Response(userModelValidator.GetUserModel())
 		if err != nil {
-			ctx.JSON(http.StatusUnprocessableEntity, common.NewStatusUnprocessableEntityError())
+			e := common.NewStatusUnprocessableEntityError()
+			ctx.JSON(e.Status(), e)
 			return
 		}
 
